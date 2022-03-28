@@ -60,14 +60,13 @@ public class AptEntity extends AbstractApt{
 
     @Override
     public String toString() {
-        return "AptEntity{" +
-                "address=" + getAddress() +
-                "operation=" + getOperation() +
-                "zone=" + getZone() +
-                "cost=" + cost +
-                ", dimension=" + dimension +
-                ", rooms=" + rooms +
-                ", aptId=" + aptId +
+        return "Apartment: { " +
+                " address= " + getAddress() +
+                " operation= " + getOperation() +
+                " zone= " + getZone() +
+                " cost= " + cost +
+                ", dimension= " + dimension +
+                ", rooms= " + rooms +
                 '}';
     }
 }

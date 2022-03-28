@@ -1,6 +1,6 @@
 package com.realestate.utils;
 
-public class Zone {
+public class Zones {
     public static final String CENTER = "center";
     public static final String DOWNTOWN = "downtown";
     public static final String UPTOWN = "uptown";

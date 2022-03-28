@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class EmployeeServiceImplemented implements IEmployeeService {
 
     Scanner sn = new Scanner(System.in);
-    String firstName, lastName, branch = null;
+    String firstName, lastName;
     int idBranch ;
 
     EmployeeEntity employee;

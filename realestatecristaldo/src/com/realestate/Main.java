@@ -1,10 +1,7 @@
 package com.realestate;
 
 import com.realestate.entity.branch.BranchEntity;
-import com.realestate.model.MenuAptView;
-import com.realestate.model.MenuBranchView;
-import com.realestate.model.MenuCustomerView;
-import com.realestate.model.MenuEmployeeView;
+import com.realestate.model.*;
 import com.realestate.utils.Branches;
 
 import java.util.InputMismatchException;
@@ -21,6 +18,7 @@ public class Main {
         MenuAptView menuAptView = new MenuAptView();
         MenuCustomerView menuCustomerView = new MenuCustomerView();
         MenuBranchView menuBranchView = new MenuBranchView();
+        MenuTransactionView menuTransactionView = new MenuTransactionView();
 
         Branches branches = new Branches();
         branches.addBranch();
@@ -31,11 +29,12 @@ public class Main {
             System.out.println("2. Apartments");
             System.out.println("3. Customers");
             System.out.println("4. Branches");
-            System.out.println("5. Terminate Program");
+            System.out.println("5. Transactions");
+            System.out.println("6. Terminate Program");
 
             try {
 
-                System.out.println("Escribe una de las opciones");
+                System.out.println("Select: ");
                 opcion = sn.nextInt();
 
                 switch (opcion) {
@@ -56,6 +55,10 @@ public class Main {
                         menuBranchView.branchMenu();
                         break;
                     case 5:
+                        System.out.println("Transactions Management");
+                        menuTransactionView.transactionMenu();
+                        break;
+                    case 6:
                         salir = true;
                         break;
                     default:

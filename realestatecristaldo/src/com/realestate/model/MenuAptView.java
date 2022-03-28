@@ -18,9 +18,10 @@ public class MenuAptView {
 
             System.out.println("1. Create Apartment");
             System.out.println("2. Read Apartment");
-            System.out.println("3. Update Apartment by Id");
-            System.out.println("4. Delete Apartment by Id");
-            System.out.println("5. Back to Main Menu");
+            System.out.println("3. Filter Apartment by Id");
+            System.out.println("4. Update Apartment by Id");
+            System.out.println("5. Delete Apartment by Id");
+            System.out.println("6. Back to Main Menu");
 
             try {
 
@@ -37,18 +38,24 @@ public class MenuAptView {
                         aptServiceImplemented.readApt();
                         break;
                     case 3:
+                        System.out.println("Filter Apartment by Id: \n");
+                        System.out.println("Enter Id: ");
+                        id = sn.nextInt();
+                        aptServiceImplemented.filterAptById(id);
+                        break;
+                    case 4:
                         System.out.println("Update Apartment by Id: \n");
                         System.out.println("Enter Id: ");
                         id = sn.nextInt();
                         aptServiceImplemented.updateApt(id);
                         break;
-                    case 4:
+                    case 5:
                         System.out.println("Delete Apartment by Id: \n");
                         System.out.println("Enter Id: ");
                         id = sn.nextInt();
                         aptServiceImplemented.deleteApt(id);
                         break;
-                    case 5:
+                    case 6:
                         salir = true;
                         break;
                     default:

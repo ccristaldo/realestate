@@ -1,12 +1,16 @@
 package com.realestate.service.implemented;
 
 import com.realestate.entity.apt.AptEntity;
+import com.realestate.exception.BadAddressException;
 import com.realestate.service.IAptService;
 import com.realestate.utils.Operation;
-import com.realestate.utils.Stock;
-import com.realestate.utils.Zone;
+import com.realestate.utils.Zones;
 
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Scanner;
+
+import static com.realestate.utils.Stock.apartments;
 
 public class AptServiceImplemented implements IAptService {
 
@@ -25,7 +29,14 @@ public class AptServiceImplemented implements IAptService {
 
         while (!exit) {
 
-            Stock.stock.add(loadApt());
+            try{
+                apartments.put(apartments.size(), loadApt());
+            }catch(BadAddressException e){
+                System.out.println("Address must have number. Try Again.");
+            }
+
+
+            //Stock.stock.add(loadApt());
 
             // clear buffer
             sn.nextLine();
@@ -39,35 +50,70 @@ public class AptServiceImplemented implements IAptService {
 
     @Override
     public void readApt() {
-        if (!Stock.stock.isEmpty()){
-            for (AptEntity a : Stock.stock){
-                if (a.isActive()) {
-                    System.out.println(a);
+
+        if (!apartments.isEmpty()) {
+            Iterator<Entry<Integer, AptEntity>> it = apartments.entrySet().iterator();
+            Entry<Integer, AptEntity> a;
+            while (it.hasNext()) {
+                a =  it.next();
+                if (a.getValue().isActive()){
+                    System.out.println(a.getKey() + " -> " + a.getValue());
                 }
             }
         }else{
-            System.out.println("There's no apartments yet \n");
+            System.out.println("There's no apartments yet");
         }
     }
 
     @Override
     public void updateApt(int id) {
+        if (apartments.containsKey(id)){
+            try{
+                apartments.put(id, loadApt());
+            }catch(BadAddressException e){
+                System.out.println("Address must have number");
+            }
 
-        Stock.stock.set(id, loadApt());
-        System.out.println("Apartment Updated \n");
+            System.out.println("Apartment Updated \n");
+        }else{
+            System.out.println("Item does not exists");
+        }
+
     }
 
     @Override
     public void deleteApt(int id) {
-
-        Stock.stock.get(id).setActive(false);
-        System.out.println("Apartment Deleted \n");
+        //soft delete
+        if (apartments.containsKey(id)){
+            apartments.get(id).setActive(false);
+            System.out.println("Apartment Deleted \n");
+        }else{
+            System.out.println("Item does not exists");
+        }
     }
 
-    public AptEntity loadApt(){
+    @Override
+    public void filterAptById(int id) {
+        if (apartments.get(id) == null){
+            System.out.println("There's no apartment with that id");
+        }else{
+            System.out.println(apartments.get(id));
+        }
+
+    }
+
+    public AptEntity loadApt() throws BadAddressException {
+
 
         System.out.println("Enter Apartment's address:");
         address = sn.nextLine();
+
+        if (!verifyAddress(address)){
+            throw new BadAddressException("Address must have number.");
+        }
+
+
+
 
         System.out.println("Select Apartment's zone: \n" +
                 " 1 - Center \n 2 - Downtown \n 3 - Uptown \n" +
@@ -83,25 +129,25 @@ public class AptServiceImplemented implements IAptService {
 
         switch (idZone){
             case 1 :
-                zone = Zone.CENTER;
+                zone = Zones.CENTER;
                 break;
             case 2:
-                zone = Zone.DOWNTOWN;
+                zone = Zones.DOWNTOWN;
                 break;
             case 3:
-                zone = Zone.UPTOWN;
+                zone = Zones.UPTOWN;
                 break;
             case 4:
-                zone = Zone.EASTSIDE;
+                zone = Zones.EASTSIDE;
                 break;
             case 5:
-                zone = Zone.WESTSIDE;
+                zone = Zones.WESTSIDE;
                 break;
             case 6:
-                zone = Zone.NORTHSIDE;
+                zone = Zones.NORTHSIDE;
                 break;
             case 7:
-                zone = Zone.SOUTHSIDE;
+                zone = Zones.SOUTHSIDE;
                 break;
             default:
                 System.out.println("Only numbers. 1-7");
@@ -130,7 +176,7 @@ public class AptServiceImplemented implements IAptService {
         System.out.println("Enter Apartment's cost:");
         cost = sn.nextDouble();
 
-        System.out.println("Enter Apartment's dimension:");
+        System.out.println("Enter Apartment's dimension (square meters):");
         dimension = sn.nextInt();
 
         System.out.println("How many rooms does the Apartment have?:");
@@ -144,8 +190,17 @@ public class AptServiceImplemented implements IAptService {
         apt.setCost(cost);
         apt.setDimension(dimension);
         apt.setRooms(rooms);
-        apt.setAptId(Stock.stock.size());
+
+        //TODO: set apt id with using hashmap
+        //apt.setAptId(Stock.stock.size());
 
         return apt;
+    }
+
+    public boolean verifyAddress(String address){
+        //TODO: verify address contains letters and numbers
+        return address.matches("[a-zA-Z][\\d]");// && address.matches(".*[0-9].*");
+
+
     }
 }
